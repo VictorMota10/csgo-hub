@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { collection, doc, setDoc, getDocs, query, orderBy, startAt } from "firebase/firestore";
+import { collection, doc, setDoc, getDocs, query, orderBy, startAt, deleteDoc } from "firebase/firestore";
 import { db } from './infra/firebase';
+
+import './styles.scss'
 
 interface UserProps {
   age: string
@@ -41,6 +43,11 @@ export const App = () => {
     setUsers(usersArray)
   }
 
+  const deleteUser = async (steamID: string) => {
+    await deleteDoc(doc(db, 'users', steamID))
+    getUsers()
+  }
+
   useEffect(() => {
     getUsers()
   }, [])
@@ -69,11 +76,13 @@ export const App = () => {
 
       <div>
         <h3>Users Online</h3>
-        {/* <h4 >{users[0]?.age}</h4> */}
 
         {users?.map((user, key) => {
-          return(
-            <h4 key={key}>{user.user}</h4>
+          return (
+            <div className='user-area'>
+              <h4 key={key}>{user.user}</h4>
+              <button type='button' onClick={() => deleteUser(user.steamID)}>Deletar</button>
+            </div>
           )
         })
         }
