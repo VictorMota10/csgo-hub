@@ -1,0 +1,30 @@
+.events__container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+
+  .left__container{
+    width: 55%;
+    padding: 0 2% 0 0;
+
+    .main-event__container{
+      background-color: #202024;
+      border-radius: 0.4rem;
+      color: var(--text-white);
+      padding: 2%;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  }
+
+  .right__container{
+    width: 45%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  overflow-x: hidden !important;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+#root {
+  background-color: #060606;
+}
+
+.ant-btn-primary {
+  background-color: #14004f !important;
+
+  &:hover {
+    background-color: #14004f !important;
+    opacity: 0.9;
+  }
+}
+
+:root {
+  --text-white: #e1e1e6;
+  --text-gray: #7c7c8a;
+  --blue-dark: #14004f;
+  --blue-light: #1f57e8;
+  --blue-input: #323645;
+
+  --red-light: #DC3545;
+
+  /* Firefox */
+  * {
+    scrollbar-width: auto;
+    scrollbar-color: #0e36af #000 !important;
+  }
+
+  /* Chrome, Edge, and Safari */
+  *::-webkit-scrollbar {
+    width: 16px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: #000 !important;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: #0e36af;
+    border-radius: 10px;
+    border: 3px solid #000;
+  }
+}
+
+.ant-notification-notice, .ant-notification-notice .ant-notification-notice-close, .ant-notification-notice .ant-notification-notice-message {
+  background-color: var(--blue-input) !important;
+  color: var(--text-white) !important;
+}

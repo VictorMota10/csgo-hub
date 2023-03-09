@@ -1,92 +1,64 @@
 import React, { useEffect, useState } from 'react'
-import { collection, doc, setDoc, getDocs, query, orderBy, startAt, deleteDoc } from "firebase/firestore";
-import { db } from './infra/firebase';
+import uuid from 'react-uuid';
+
+import io from 'socket.io-client'
 
 import './styles.scss'
 
-interface UserProps {
-  age: string
-  steamID: string
-  user: string
-}
+const socket = io('http://localhost:8080')
+socket.on('connect', () => console.log("[IO] Connect => New Connection"))
 
-interface MyInterface extends Array<UserProps> { }
+export const App = ({ children }: { children: JSX.Element }) => {
+  // useEffect(() => {
+  //   socket.on('test.event', handleNewUser)
+  //   socket.off('test.event', handleNewUser)
+  // }, [])
 
-export const App = () => {
+  // const emitEvent = async () => {
+  //   const userData = {
+  //     user: username,
+  //     age: age,
+  //     steamID: steamID
+  //   }
+  //   socket.emit('test.event', {
+  //     id: myId,
+  //     userData
+  //   })
+  // }
 
-  const [username, setUsername] = useState('')
-  const [age, setAge] = useState('')
-  const [steamID, setSteamID] = useState('')
+  function parseJwt(token: string) {
+    console.log(token)
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
 
-  const [users, setUsers] = useState<MyInterface>()
-
-
-  const submitTest = async () => {
-    await setDoc(doc(db, "users", steamID), {
-      user: username,
-      age: age,
-      steamID: steamID
-    });
-
-    getUsers()
+    return JSON.parse(jsonPayload);
   }
 
-  const getUsers = async () => {
-    const colRef = collection(db, "users");
-    const docsSnap = await getDocs(colRef);
-    const usersArray: any = []
+  const verify = async (token: string) => {
+    const decoded = parseJwt(token)
+    console.log(new Date(decoded.exp*1000))
+    
+    console.log(new Date(decoded.auth_time*1000))
 
-    docsSnap.forEach(doc => {
-      usersArray.push(doc.data());
-    })
-
-    setUsers(usersArray)
-  }
-
-  const deleteUser = async (steamID: string) => {
-    await deleteDoc(doc(db, 'users', steamID))
-    getUsers()
   }
 
   useEffect(() => {
-    getUsers()
+    const token = getCookie('accessToken')
+    verify(token || '')
   }, [])
+
+  function getCookie(name: string) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts?.pop()?.split(';').shift();
+  }
 
   return (
     <>
-      <form className="App">
-        <div>
-          <label>Username: </label>
-          <input onChange={(e) => setUsername(e.currentTarget.value)} />
-        </div>
-
-        <div>
-          <label>Age: </label>
-          <input onChange={(e) => setAge(e.currentTarget.value)} />
-        </div>
-
-        <div>
-          <label>SteamID: </label>
-          <input onChange={(e) => setSteamID(e.currentTarget.value)} />
-        </div>
-
-        <button type='button' onClick={() => submitTest()}>Registrar info</button>
-
-      </form>
-
-      <div>
-        <h3>Users Online</h3>
-
-        {users?.map((user, key) => {
-          return (
-            <div className='user-area'>
-              <h4 key={key}>{user.user}</h4>
-              <button type='button' onClick={() => deleteUser(user.steamID)}>Deletar</button>
-            </div>
-          )
-        })
-        }
-      </div>
+      {children}
     </>
   )
 }
