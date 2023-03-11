@@ -53,11 +53,11 @@ export const checkUserDataUniqueAlreadyExists = async (data: any) => {
   return dataAlreadyExists;
 };
 
-export const getPlayerById = async (uuid: string) => {
+export const getPlayerById = async (uid: string) => {
   let playerInfo;
   try {
     goOnline(realtime_db);
-    await get(ref(realtime_db, `users/${uuid}`))
+    await get(ref(realtime_db, `users/${uid}`))
       .then((snapshot) => {
         playerInfo = snapshot.val();
       })

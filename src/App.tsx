@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import uuid from 'react-uuid';
 
 import io from 'socket.io-client'
+import { Logout } from './components/Logout';
 
 import './styles.scss'
 
@@ -9,6 +11,8 @@ const socket = io('http://localhost:8080')
 socket.on('connect', () => console.log("[IO] Connect => New Connection"))
 
 export const App = ({ children }: { children: JSX.Element }) => {
+  const [goToLogOut, setGoToLogOut] = useState(false)
+
   // useEffect(() => {
   //   socket.on('test.event', handleNewUser)
   //   socket.off('test.event', handleNewUser)
@@ -27,7 +31,9 @@ export const App = ({ children }: { children: JSX.Element }) => {
   // }
 
   function parseJwt(token: string) {
-    console.log(token)
+    if (token === '') {
+      return null;
+    }
     var base64Url = token.split('.')[1];
     var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
@@ -39,10 +45,19 @@ export const App = ({ children }: { children: JSX.Element }) => {
 
   const verify = async (token: string) => {
     const decoded = parseJwt(token)
-    console.log(new Date(decoded.exp*1000))
-    
-    console.log(new Date(decoded.auth_time*1000))
+    if (!decoded) {
+      logOut()
+    } else {
+      signInOk()
+    }
+  }
 
+  const logOut = () => {
+    setGoToLogOut(true)
+  }
+  
+  const signInOk = () => {
+    setGoToLogOut(false)
   }
 
   useEffect(() => {
@@ -58,7 +73,11 @@ export const App = ({ children }: { children: JSX.Element }) => {
 
   return (
     <>
-      {children}
+      {goToLogOut ?
+        <Logout />
+        :
+        children
+      }
     </>
   )
 }

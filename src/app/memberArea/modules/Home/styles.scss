@@ -1,0 +1,220 @@
+.content__area--home {
+  width: 100%;
+
+  .btn__success {
+    color: var(--text-white);
+    background-color: var(--green-light);
+    border: none;
+
+    &:hover {
+      transform: scale(1.05);
+      color: var(--text-white);
+      background-color: var(--green-light);
+    }
+  }
+
+  .header__home {
+    height: 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .player__info {
+      height: 100%;
+      width: 33%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+
+      .player__avatar {
+        margin-right: 0.4rem;
+      }
+
+      h3 {
+        color: var(--text-white);
+      }
+    }
+
+    .middle_area {
+      height: 100%;
+      width: 33%;
+      display: flex;
+      justify-content: center;
+
+      .logo_csgo {
+        width: 30%;
+        height: 100%;
+      }
+    }
+
+    .play__area {
+      height: 100%;
+      width: 33%;
+
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+
+      .create__squad {
+        width: 50%;
+        height: 70%;
+      }
+    }
+  }
+
+  .overview__container {
+    box-shadow: 2px 2px 50px rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    padding: 1rem;
+    margin: 4rem 0;
+
+    .overview__head {
+      display: flex;
+      justify-content: space-between;
+
+      h2 {
+        margin-top: 0 !important;
+        margin-bottom: 2rem;
+        color: var(--text-white);
+      }
+
+      h3 {
+        margin-top: 0 !important;
+        margin-bottom: 2rem;
+        color: var(--text-white);
+        padding: 0 0.5rem 0 0;
+      }
+    }
+    span {
+      font-size: 1rem;
+      color: var(--text-gray);
+    }
+
+    .overview__head--weapon {
+      display: flex;
+      justify-content: space-between;
+
+      h2 {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        color: var(--text-white);
+      }
+
+      h3 {
+        margin-top: 0 !important;
+        margin-bottom: 2rem;
+        color: var(--text-white);
+        padding: 0 0.5rem 0 0;
+      }
+    }
+
+    .stats__container {
+      .column__stats {
+        padding: 0 0.5rem 0 0;
+        height: auto;
+      }
+
+      .box__stat {
+        width: 100%;
+        height: 100%;
+        background-color: var(--gray-dark);
+        border-radius: 14px;
+
+        padding: 1rem;
+
+        h4 {
+          font-size: 1rem;
+          margin: 0 !important;
+          color: var(--text-white);
+        }
+
+        h1 {
+          font-size: 2rem;
+          margin: 0.5rem 0 0 !important;
+          color: var(--text-white);
+        }
+      }
+    }
+
+    .stats__container--weapon {
+      .column__stats {
+        padding: 0 0.5rem 0 0;
+        height: auto;
+      }
+
+      .box__stat {
+        width: 100%;
+        height: 100%;
+        background-color: var(--gray-dark);
+        border-radius: 14px;
+
+        padding: 1rem;
+
+        .box__head {
+          display: flex;
+          justify-content: space-between;
+
+          img {
+            width: 3rem;
+          }
+        }
+
+        h4 {
+          font-size: 1rem;
+          margin: 0 !important;
+          color: var(--text-white);
+        }
+
+        h1 {
+          font-size: 2rem;
+          margin: 0.5rem 0 0 !important;
+          color: var(--text-white);
+        }
+      }
+    }
+  }
+}
+
+.rotate {
+  -webkit-animation: spin1 2s linear;
+  -moz-animation: spin1 2s linear;
+  -o-animation: spin1 2s linear;
+  -ms-animation: spin1 2s linear;
+  animation: spin1 2s linear;
+
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  width: auto;
+  height: auto;
+}
+
+@-webkit-keyframes spin1 {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(180deg);
+  }
+}
+@-moz-keyframes spin1 {
+  0% {
+    -moz-transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(180deg);
+  }
+}
+@keyframes spin1 {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(180deg);
+  }
+}

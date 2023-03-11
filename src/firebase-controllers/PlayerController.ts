@@ -1,11 +1,9 @@
 import { goOffline, goOnline, ref, set } from "firebase/database";
-import uuid from "react-uuid";
 import { realtime_db } from "../infra/firebase";
 
-export const registerPlayer = async (data: any) => {
+export const registerPlayer = async (data: any, uid: string) => {
   let userCreated;
 
-  const uuidSaved = uuid();
   const newPlayer: any = {
     playerData: {
       firstName: data.firstName,
@@ -18,9 +16,9 @@ export const registerPlayer = async (data: any) => {
 
   goOnline(realtime_db);
   try {
-    await set(ref(realtime_db, "users/" + uuidSaved), newPlayer);
+    await set(ref(realtime_db, "users/" + uid), newPlayer);
     userCreated = {
-      id: uuidSaved,
+      id: uid,
       newPlayer,
     };
   } catch (error: any) {

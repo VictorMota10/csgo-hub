@@ -1,21 +1,22 @@
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../infra/firebase'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form';
 import { Input } from '../../components/Input';
 import { Button, Col, Row, Space, Tooltip, notification } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { checkUserDataUniqueAlreadyExists, deletePlayerById, getPlayerById } from '../../firebase-controllers/UserController';
 import { getSteamData } from '../../firebase-controllers/SteamController';
 import './styles.scss'
 import { Header } from '../../components/Header';
-import { InfoCircleOutlined, RobotOutlined, UserOutlined } from '@ant-design/icons'
+import { InfoCircleOutlined } from '@ant-design/icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faUser } from '@fortawesome/free-regular-svg-icons';
 import { faGamepad, faKey } from '@fortawesome/free-solid-svg-icons';
 import { faSteam } from '@fortawesome/free-brands-svg-icons';
 import { registerPlayer } from '../../firebase-controllers/PlayerController';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { validations } from './utils/validations';
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -26,7 +27,9 @@ export const Register = () => {
   const [api, contextHolder] = notification.useNotification();
 
   const navigate = useNavigate()
-  const methods = useForm();
+  const methods = useForm({
+    resolver: yupResolver(validations)
+  });
   const {
     control,
     reset,
@@ -62,36 +65,38 @@ export const Register = () => {
       const steamInfo = await getSteamData(data.steamID)
 
       if (steamInfo.steamResponse) {
-        const playerCreated = await registerPlayer(data)
 
-        if (playerCreated) {
-          await createUserWithEmailAndPassword(auth, data.email, data.password)
-            .then((userCredential) => {
-              const user = userCredential.user;
-              setTimeout(() => {
-                navigate('/login')
-              }, 2000)
+        await createUserWithEmailAndPassword(auth, data.email, data.password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            setTimeout(() => {
+              navigate('/login')
+            }, 2000)
 
-              openNotification('success', 'Sucesso!', 'Usuário criado com sucesso.', )
-            })
-            .catch((error) => {
-              getMessageError(error.code)
-              deletePlayerById(playerCreated?.id)
-              openNotification('error','Error', errorMessage)
-            });
-        } else {
-          openNotification('error','Error', 'Houve um erro ao cadastrar player.')
+            openNotification('success', 'Sucesso!', 'Usuário criado com sucesso.',)
+          })
+          .catch((error) => {
+            getMessageError(error.code)
+            openNotification('error', 'Error', errorMessage)
+          });
+
+        if (auth.currentUser?.email) {
+          const playerCreated = await registerPlayer(data, auth.currentUser?.uid)
+          if (!playerCreated) {
+            openNotification('error', 'Error', 'Houve um erro ao cadastrar player.')
+            auth.currentUser?.delete()
+          }
         }
+
+
+
       } else {
-        openNotification('error','Error', 'SteamID inválido!')
+        openNotification('error', 'Error', 'SteamID inválido!')
       }
     }
   }
 
-  const openNotification = (type: NotificationType, title: string, message: string, ) => {
-    const notifyElement = (document.getElementsByClassName('ant-notification')[0] as HTMLDivElement)
-    console.log(notifyElement)
-
+  const openNotification = (type: NotificationType, title: string, message: string,) => {
     api[type]({
       message: title,
       description: message,
@@ -220,6 +225,11 @@ export const Register = () => {
                       placeholder="Type your passord..."
                       autoComplete="off"
                       prefix={<FontAwesomeIcon icon={faKey} />}
+                      suffix={
+                        <Tooltip title="Password must have at least: 1 Uppercase letter, 1 Lowercase letter, 1 number and 8 characters.">
+                          <InfoCircleOutlined style={{ color: 'rgba(255,255,255,.45)' }} />
+                        </Tooltip>
+                      }
                     />
                   </Col>
                   <Col span={12}>

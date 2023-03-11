@@ -33,10 +33,10 @@ export const Login = () => {
     formState: { errors },
   } = methods;
 
-  const handleLogin = (data: any) => {
-    signInWithEmailAndPassword(auth, data.email, data.password)
-      .then((userCredential: any) => {
-        setUserDataCookies(userCredential.user)
+  const handleLogin = async (data: any) => {
+    await signInWithEmailAndPassword(auth, data.email, data.password)
+      .then(async (userCredential: any) => {
+        await handleUserDataCookies(userCredential.user)
         navigate('/member-area/home')
       })
       .catch((error) => {
@@ -45,9 +45,12 @@ export const Login = () => {
       });
   }
 
-  const setUserDataCookies = (userData: any) => {
+  const handleUserDataCookies = async (userData: any) => {
+    const playerData: any = await getPlayerById(auth.currentUser?.uid || '')
+
     document.cookie = `accessToken=${userData.accessToken}`
     document.cookie = `email=${userData.email}`
+    document.cookie = `steamID=${playerData.playerData?.steamID}`
   }
 
   const getMessageError = (errorText: string) => {
