@@ -59,6 +59,19 @@ export const MemberArea = ({ children }: { children: JSX.Element }) => {
     if (parts.length === 2) return parts?.pop()?.split(';').shift();
   }
 
+  function deleteAllCookies() {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+
+    localStorage.clear();
+  }
+
   return (
     <>
       {goToLogOut ?
@@ -90,7 +103,7 @@ export const MemberArea = ({ children }: { children: JSX.Element }) => {
               </Menu.Item>
               <Menu.Item
                 key="logout"
-                onClick={() => navigate("/login")}
+                onClick={() => { navigate("/login"); deleteAllCookies() }}
                 icon={
                   <FontAwesomeIcon icon={faSignOutAlt} />
                 }

@@ -11,10 +11,24 @@ export const Logout = () => {
 
   useEffect(() => {
     if(count === 0){
+      deleteAllStorageNavigator()
       navigate('/login')
     }
     count > 0 && setTimeout(() => setCount(count - 1), 1000);
   }, [count])
+
+  function deleteAllStorageNavigator() {
+    const cookies = document.cookie.split(";");
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+
+    localStorage.clear();
+  }
 
   return (
     <>

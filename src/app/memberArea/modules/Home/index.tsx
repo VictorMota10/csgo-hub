@@ -1,5 +1,5 @@
 import { LoadingOutlined, ReloadOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Col, Row, Space, notification, } from 'antd'
+import { Avatar, Button, Col, Row, Space, notification, Alert, } from 'antd'
 import react, { useEffect, useState } from 'react'
 import './styles.scss'
 
@@ -135,9 +135,19 @@ export const Home = () => {
             <img src={LogoCSGO} className="logo_csgo" />
           </section>
           <section className="play__area">
-            <Button className='btn__success create__squad'>Criar Grupo</Button>
+            <Button className='btn__success create__squad'>Create Group</Button>
           </section>
         </div>
+
+        {privateProfileSteam &&
+          <Alert
+            message="Error fetching steam data..."
+            description="Confirm that your steam is public so we can fetch your player data."
+            type="error"
+            showIcon
+          />
+        }
+
 
         <div className='overview__container'>
           <div className='overview__head'>

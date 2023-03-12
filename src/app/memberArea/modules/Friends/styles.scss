@@ -1,0 +1,74 @@
+.content__area--friends {
+  width: 100%;
+
+  .search__container {
+    width: 50%;
+
+    input {
+      height: 100%;
+      background-color: var(--gray-dark);
+      border: none !important;
+      color: var(--text-white);
+
+      &::placeholder {
+        background-color: var(--gray-dark);
+        border: none !important;
+        color: var(--text-gray);
+      }
+    }
+
+    span{
+      height: 2.8rem;
+      display: flex;
+      align-items: center;
+      
+
+      button{
+        height: 100%;
+      }
+    }
+  }
+
+  .list__container{
+    padding: 4% 0;
+
+    max-height: 85vh;
+    height: 85vh;
+
+    overflow-y: auto;
+
+    &{
+      scrollbar-width: auto;
+      scrollbar-color: var(--text-gray) var(--blue-input) !important;
+    }
+  
+    /* Chrome, Edge, and Safari */
+    &::-webkit-scrollbar {
+      width: 16px;
+    }
+  
+    &::-webkit-scrollbar-track {
+      background: var(--blue-input) !important;
+    }
+  
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--text-gray);
+      border-radius: 10px;
+      border: 3px solid var(--blue-input);
+    }
+
+    .ant-list-item-meta-content h4{
+      margin: 0.2rem 0 0 !important;
+      font-size: 1rem !important;
+      color: var(--text-white) !important;
+    }
+
+    .ant-list-item-action li{
+      padding-right: 2rem !important;
+    }
+
+    .ant-empty-description{
+      color: var(--text-white) !important;
+    }
+  }
+}

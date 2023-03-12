@@ -4,6 +4,7 @@ import { App } from './App';
 import { LandingPage } from './app/landingPage';
 import { Login } from './app/login';
 import { MemberArea } from './app/memberArea';
+import { Friends } from './app/memberArea/modules/Friends';
 import { Home } from './app/memberArea/modules/Home';
 import { Register } from './app/register';
 
@@ -25,7 +26,7 @@ export const MainRoutes = () => {
 
       <Route path="/member-area/friends" element={
         <MemberArea>
-          <Home />
+          <Friends />
         </MemberArea>
       } />
 

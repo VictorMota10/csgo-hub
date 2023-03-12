@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 export const Login = () => {
+  const [loadingLogin, setLoadingLogin] = useState(false)
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ export const Login = () => {
   } = methods;
 
   const handleLogin = async (data: any) => {
+    setLoadingLogin(true)
     await signInWithEmailAndPassword(auth, data.email, data.password)
       .then(async (userCredential: any) => {
         await handleUserDataCookies(userCredential.user)
@@ -43,6 +45,7 @@ export const Login = () => {
         const errorFirebase = error.code;
         getMessageError(errorFirebase)
       });
+    setLoadingLogin(false)
   }
 
   const handleUserDataCookies = async (userData: any) => {
@@ -51,6 +54,7 @@ export const Login = () => {
     document.cookie = `accessToken=${userData.accessToken}`
     document.cookie = `email=${userData.email}`
     document.cookie = `steamID=${playerData.playerData?.steamID}`
+    document.cookie = `username=${playerData.playerData?.username}`
   }
 
   const getMessageError = (errorText: string) => {
@@ -134,7 +138,7 @@ export const Login = () => {
 
                 <Row style={{ width: '100%' }} gutter={32}>
                   <Col span={24}>
-                    <Button htmlType='submit' className='btn__create' type="primary">Login</Button>
+                    <Button loading={loadingLogin} htmlType='submit' className='btn__create' type="primary">Login</Button>
                   </Col>
                 </Row>
               </Space>
@@ -143,30 +147,6 @@ export const Login = () => {
           </FormProvider>
         </div>
       </div>
-      {/* <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(handleLogin)}>
-          <S.FormContainer>
-            <Input
-              name="email"
-              label="Email"
-              required
-              type="email"
-              maxLength={100}
-              placeholder="Digite o email..."
-            />
-            <Input
-              name="password"
-              label="Senha"
-              required
-              type="password"
-              maxLength={100}
-              placeholder="Digite a senha..."
-            />
-            <Button htmlType='submit' type="primary">Sign In</Button>
-            {error && <span>{errorMessage || 'Houve um erro ao fazer login'}</span>}
-          </S.FormContainer>
-        </form>
-      </FormProvider> */}
     </>
   )
 }

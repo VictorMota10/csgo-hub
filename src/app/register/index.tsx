@@ -21,6 +21,7 @@ import { validations } from './utils/validations';
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 export const Register = () => {
+  const [loadingRegister, setLoadingRegister] = useState(false)
   const [errorRegister, setErrorRegister] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
@@ -55,6 +56,7 @@ export const Register = () => {
   }
 
   const handleCreateUser = async (data: any) => {
+    setLoadingRegister(true)
     const userDataArrayExists: Array<any> = await checkUserDataUniqueAlreadyExists(data)
 
     if (userDataArrayExists.length > 0) {
@@ -62,10 +64,9 @@ export const Register = () => {
         setError(field, { type: 'custom', message: `${field} já cadastrado.` })
       })
     } else {
-      const steamInfo = await getSteamData(data.steamID)
+      const steamInfo: any = await getSteamData(data.steamID)
 
       if (steamInfo.steamResponse) {
-
         await createUserWithEmailAndPassword(auth, data.email, data.password)
           .then((userCredential) => {
             const user = userCredential.user;
@@ -81,19 +82,18 @@ export const Register = () => {
           });
 
         if (auth.currentUser?.email) {
+          data.avatar = steamInfo?.steamResponse?.avatar
           const playerCreated = await registerPlayer(data, auth.currentUser?.uid)
           if (!playerCreated) {
             openNotification('error', 'Error', 'Houve um erro ao cadastrar player.')
             auth.currentUser?.delete()
           }
         }
-
-
-
       } else {
         openNotification('error', 'Error', 'SteamID inválido!')
       }
     }
+    setLoadingRegister(false)
   }
 
   const openNotification = (type: NotificationType, title: string, message: string,) => {

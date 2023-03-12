@@ -61,6 +61,15 @@
       }
     }
   }
+  
+  .ant-alert-error{
+    background-color: rgba(255, 119, 119, 0.41);
+    color: var(--text-white);
+
+    .ant-alert-message{
+      color: var(--text-white);
+    }
+  }
 
   .overview__container {
     box-shadow: 2px 2px 50px rgba(255, 255, 255, 0.05);
