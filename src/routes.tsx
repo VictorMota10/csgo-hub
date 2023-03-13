@@ -5,6 +5,8 @@ import { LandingPage } from './app/landingPage';
 import { Login } from './app/login';
 import { MemberArea } from './app/memberArea';
 import { Friends } from './app/memberArea/modules/Friends';
+import { Invites } from './app/memberArea/modules/Friends/Invites';
+import { ListFriends } from './app/memberArea/modules/Friends/ListFriends';
 import { Home } from './app/memberArea/modules/Home';
 import { Register } from './app/register';
 
@@ -27,6 +29,18 @@ export const MainRoutes = () => {
       <Route path="/member-area/friends" element={
         <MemberArea>
           <Friends />
+        </MemberArea>
+      } />
+
+      <Route path="/member-area/invites" element={
+        <MemberArea>
+          <Invites />
+        </MemberArea>
+      } />
+
+      <Route path="/member-area/list-friends" element={
+        <MemberArea>
+          <ListFriends />
         </MemberArea>
       } />
 

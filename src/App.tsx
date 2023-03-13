@@ -6,6 +6,7 @@ import io from 'socket.io-client'
 import { Logout } from './components/Logout';
 
 import './styles.scss'
+import { getCookie } from './utils/getCookies';
 
 const socket = io('http://localhost:8080')
 socket.on('connect', () => console.log("[IO] Connect => New Connection"))
@@ -64,12 +65,6 @@ export const App = ({ children }: { children: JSX.Element }) => {
     const token = getCookie('accessToken')
     verify(token || '')
   }, [])
-
-  function getCookie(name: string) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts?.pop()?.split(';').shift();
-  }
 
   return (
     <>

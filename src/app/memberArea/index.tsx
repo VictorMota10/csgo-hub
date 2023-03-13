@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import { Logout } from '../../components/Logout';
 
 import LogoEagles from '../../assets/Logo.png'
+import { getCookie } from '../../utils/getCookies';
 
 
 export const MemberArea = ({ children }: { children: JSX.Element }) => {
@@ -53,12 +54,6 @@ export const MemberArea = ({ children }: { children: JSX.Element }) => {
     verify(token || '')
   }, [])
 
-  function getCookie(name: string) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts?.pop()?.split(';').shift();
-  }
-
   function deleteAllCookies() {
     const cookies = document.cookie.split(";");
 
@@ -92,15 +87,30 @@ export const MemberArea = ({ children }: { children: JSX.Element }) => {
               >
                 <span>Home</span>
               </Menu.Item>
-              <Menu.Item
+              <Menu.SubMenu
                 key="friends"
-                onClick={() => navigate("/member-area/friends")}
-                icon={
-                  <FontAwesomeIcon icon={faUserFriends} />
-                }
+                icon={<FontAwesomeIcon icon={faUserFriends} />}
+                title="Friends"
               >
-                <span>Friend's</span>
-              </Menu.Item>
+                <Menu.Item
+                  key="add-friends"
+                  onClick={() => navigate("/member-area/friends")}
+                >
+                  <span>Add Friends</span>
+                </Menu.Item>
+                <Menu.Item
+                  key="list-invites"
+                  onClick={() => navigate("/member-area/invites")}
+                >
+                  <span>Your Invites</span>
+                </Menu.Item>
+                <Menu.Item
+                  key="list-friends"
+                  onClick={() => navigate("/member-area/list-friends")}
+                >
+                  <span>List friends</span>
+                </Menu.Item>
+              </Menu.SubMenu>
               <Menu.Item
                 key="logout"
                 onClick={() => { navigate("/login"); deleteAllCookies() }}

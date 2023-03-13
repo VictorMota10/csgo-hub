@@ -59,15 +59,15 @@ export const Login = () => {
 
   const getMessageError = (errorText: string) => {
     if (errorText === 'auth/user-not-found') {
-      openNotification('error', 'Erro', 'Usuário não encontrado.')
+      openNotification('error', 'Error', 'User not found.')
     }
 
     if (errorText === 'auth/invalid-email') {
-      openNotification('error', 'Erro', 'Email inválido.')
+      openNotification('error', 'Error', 'Invalid E-mail.')
     }
 
     if (errorText === 'auth/wrong-password') {
-      openNotification('error', 'Erro', 'Credênciais inválidas.')
+      openNotification('error', 'Error', 'Invalid Credentials.')
     }
 
   }

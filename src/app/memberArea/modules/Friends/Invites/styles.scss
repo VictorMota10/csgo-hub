@@ -1,0 +1,36 @@
+.title__invites{
+  color: var(--text-white);
+  font-size: 1.4rem;
+}
+
+.ant-list-item-meta-content h4{
+  margin: 0.2rem 0 0 !important;
+  font-size: 1rem !important;
+  color: var(--text-white) !important;
+}
+
+.ant-list-item-action li{
+  padding-right: 2rem !important;
+}
+
+.ant-empty-description{
+  color: var(--text-white) !important;
+}
+
+.decline__invite {
+  color: var(--red-light);
+
+  &:hover{
+    color: var(--red-light);
+    transform: scale(1.1);
+  }
+}
+
+.accept__invite {
+  color: var(--green-light);
+
+  &:hover{
+    color: var(--green-light);
+    transform: scale(1.1);
+  }
+}

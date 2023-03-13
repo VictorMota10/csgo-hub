@@ -74,7 +74,7 @@ export const Register = () => {
               navigate('/login')
             }, 2000)
 
-            openNotification('success', 'Sucesso!', 'Usuário criado com sucesso.',)
+            openNotification('success', 'Success', 'User created!',)
           })
           .catch((error) => {
             getMessageError(error.code)
@@ -85,12 +85,12 @@ export const Register = () => {
           data.avatar = steamInfo?.steamResponse?.avatar
           const playerCreated = await registerPlayer(data, auth.currentUser?.uid)
           if (!playerCreated) {
-            openNotification('error', 'Error', 'Houve um erro ao cadastrar player.')
+            openNotification('error', 'Error', 'Has error on try to create user!')
             auth.currentUser?.delete()
           }
         }
       } else {
-        openNotification('error', 'Error', 'SteamID inválido!')
+        openNotification('error', 'Error', 'Invalid SteamID')
       }
     }
     setLoadingRegister(false)

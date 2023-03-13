@@ -2,9 +2,11 @@ import './styles.scss'
 import React, { useEffect, useState } from 'react'
 import { Avatar, List, notification } from 'antd';
 import { Input } from 'antd';
-import { getPlayerBySteamID, getPlayerByUsername } from '../../../../firebase-controllers/PlayerController';
+import { getPlayerBySteamID, getPlayerByUsername, inviteFriend } from '../../../../firebase-controllers/PlayerController';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserAlt } from '@fortawesome/free-solid-svg-icons';
+import { auth } from '../../../../infra/firebase';
+import { getCookie } from '../../../../utils/getCookies';
 
 const { Search } = Input;
 
@@ -13,13 +15,11 @@ type NotificationType = 'success' | 'info' | 'warning' | 'error';
 export const Friends = () => {
   const [initLoading, setInitLoading] = useState(false);
   const [data, setData] = useState<any>();
-  const [list, setList] = useState<any>();
 
   const [api, contextHolder] = notification.useNotification();
 
   const searchUsers = async (querySearch: string) => {
     setData([]);
-    setList([]);
     let playerData = []
     setInitLoading(true);
     const regexNumbers = new RegExp(/^\d+$/)
@@ -29,18 +29,31 @@ export const Friends = () => {
       if (player.length !== 0) {
         playerData.push(player)
         setData(playerData);
-        setList(playerData);
       }
     } else {
       const player = await getPlayerByUsername(querySearch)
       if (player.length !== 0) {
         playerData.push(player)
         setData(playerData);
-        setList(playerData);
       }
     }
 
     setInitLoading(false);
+  }
+
+  const handleSendInvite = async (uid: string) => {
+    const playerSenderInvite: any = {
+      uid: auth.currentUser?.uid,
+      username: getCookie('username' || '')
+    }
+
+    auth.currentUser?.uid
+    const invitedPlayer = await inviteFriend(uid, playerSenderInvite)
+    if(!invitedPlayer){
+      openNotification('error', 'Error', 'Player already added or invitation already sent.')
+    } else {
+      openNotification('success', 'Success', 'Invitation sent successfully!')
+    }
   }
 
   const openNotification = (type: NotificationType, title: string, message: string) => {
@@ -64,7 +77,7 @@ export const Friends = () => {
             dataSource={data}
             renderItem={(item: any, index) => (
               <List.Item
-                actions={[<a key="list-loadmore-edit">Send Invite</a>]}
+                actions={[<a key="list-loadmore-edit" onClick={() => handleSendInvite(item?.uid)}>Send Invite</a>]}
               >
                 <List.Item.Meta
                   avatar={<Avatar src={item?.avatar || <FontAwesomeIcon icon={faUserAlt} />} />}

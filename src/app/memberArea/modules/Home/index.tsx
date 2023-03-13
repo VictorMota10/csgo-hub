@@ -9,6 +9,7 @@ import { GET_STATS_STEAM_PLAYER, TRN_STEAM_API } from '../../../../service/confi
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import { faGun } from '@fortawesome/free-solid-svg-icons'
+import { getCookie } from '../../../../utils/getCookies'
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
@@ -34,12 +35,6 @@ export const Home = () => {
     }
 
   }, [playerSteamID])
-
-  function getCookie(name: string) {
-    const value = `; ${document.cookie}`;
-    const parts = value.split(`; ${name}=`);
-    if (parts.length === 2) return parts?.pop()?.split(';').shift();
-  }
 
   const getSteamStats = async () => {
 
