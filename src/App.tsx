@@ -7,8 +7,9 @@ import { Logout } from './components/Logout';
 
 import './styles.scss'
 import { getCookie } from './utils/getCookies';
+import { SOCKET_SERVER_URL } from './utils/socketGlobals';
 
-const socket = io('http://localhost:8080')
+const socket = io(SOCKET_SERVER_URL)
 socket.on('connect', () => console.log("[IO] Connect => New Connection"))
 
 export const App = ({ children }: { children: JSX.Element }) => {

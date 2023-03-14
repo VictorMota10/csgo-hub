@@ -1,3 +1,5 @@
 export const users = 'users'
 export const friendInvites = 'friendInvites'
 export const friendList = 'friendList'
+export const invitesToPlay = 'invitesToPlay'
+export const lobbies = 'lobbies'

@@ -47,7 +47,6 @@ export const Friends = () => {
       username: getCookie('username' || '')
     }
 
-    auth.currentUser?.uid
     const invitedPlayer = await inviteFriend(uid, playerSenderInvite)
     if(!invitedPlayer){
       openNotification('error', 'Error', 'Player already added or invitation already sent.')

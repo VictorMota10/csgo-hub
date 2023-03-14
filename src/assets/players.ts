@@ -114,9 +114,9 @@ export const players = [
   {
     name: "Matheus",
     lastName: "Marques",
-    nick: "⠀",
-    steam: "",
-    steamID: "",
+    nick: "ÐogmA",
+    steam: "https://steamcommunity.com/profiles/76561198062409874",
+    steamID: "76561198062409874",
     avatar: "../src/assets/players/matheus.png",
   },
   {
@@ -126,5 +126,13 @@ export const players = [
     steam: "https://steamcommunity.com/profiles/76561198072909890/",
     steamID: "STEAM_0:0:56322081",
     avatar: "../src/assets/players/peluda.png",
+  },
+  {
+    name: "Eduardo",
+    lastName: "Rossi",
+    nick: "",
+    steam: "",
+    steamID: "",
+    avatar: "",
   },
 ];

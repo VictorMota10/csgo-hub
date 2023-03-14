@@ -1,9 +1,9 @@
 import './styles.scss'
 import React, { useEffect, useState } from 'react'
 
-import { faHomeAlt, faLock, faSignOutAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faGamepad, faHomeAlt, faLock, faSignOutAlt, faUserFriends } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Breadcrumb, Layout, Menu } from 'antd';
+import { Badge, Breadcrumb, Layout, Menu, notification } from 'antd';
 import { Content, Footer } from 'antd/es/layout/layout';
 import Sider from 'antd/es/layout/Sider';
 
@@ -12,12 +12,31 @@ import { Logout } from '../../components/Logout';
 
 import LogoEagles from '../../assets/Logo.png'
 import { getCookie } from '../../utils/getCookies';
+import { io } from 'socket.io-client';
+import { SOCKET_SERVER_URL } from '../../utils/socketGlobals';
+import { auth } from '../../infra/firebase';
 
+type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 export const MemberArea = ({ children }: { children: JSX.Element }) => {
+  const [api, contextHolder] = notification.useNotification();
   const navigate = useNavigate()
   const [goToLogOut, setGoToLogOut] = useState(false)
   const [collapsed, setCollapsed] = useState(false);
+  const socket = io(SOCKET_SERVER_URL)
+
+  //events
+  socket.on("invite_received_front", (data: any) => {
+    if (data?.sentTo === auth.currentUser?.uid) {
+      openNotification('info', 'Info', 'You just received a friend request...')
+    }
+  });
+
+  socket.on("player_join_lobby_front", (data: any) => {
+    if (data?.sentTo === auth.currentUser?.uid) {
+      openNotification('info', 'Info', 'You just received a friend request...')
+    }
+  });
 
   function parseJwt(token: string) {
     if (token === '') {
@@ -67,12 +86,20 @@ export const MemberArea = ({ children }: { children: JSX.Element }) => {
     localStorage.clear();
   }
 
+  const openNotification = (type: NotificationType, title: string, message: string) => {
+    api[type]({
+      message: title,
+      description: message,
+    });
+  };
+
   return (
     <>
       {goToLogOut ?
         <Logout />
         :
         <Layout style={{ minHeight: '100vh' }}>
+          {contextHolder}
           <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
             <div className="area__logo">
               <img src={LogoEagles} className="logo__menu" />
@@ -86,6 +113,15 @@ export const MemberArea = ({ children }: { children: JSX.Element }) => {
                 }
               >
                 <span>Home</span>
+              </Menu.Item>
+              <Menu.Item
+                key="invites-play"
+                onClick={() => navigate("/member-area/invites-play")}
+                icon={
+                  <FontAwesomeIcon icon={faGamepad} />
+                }
+              >
+                <span>Invites to play </span>
               </Menu.Item>
               <Menu.SubMenu
                 key="friends"

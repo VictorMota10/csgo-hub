@@ -7,9 +7,13 @@ import {
   remove,
   set,
 } from "firebase/database";
+import { io } from "socket.io-client";
 import { realtime_db } from "../infra/firebase";
-import { friendInvites, friendList, users } from "../utils/databaseNames";
+import { friendInvites, friendList, invitesToPlay, users } from "../utils/databaseNames";
 import { getCookie } from "../utils/getCookies";
+import { SOCKET_SERVER_URL } from "../utils/socketGlobals";
+
+const socket = io(SOCKET_SERVER_URL);
 
 export const registerPlayer = async (data: any, uid: string) => {
   let userCreated;
@@ -130,7 +134,6 @@ export const inviteFriend = async (uid: string, playerSenderData: any) => {
   } catch (error: any) {
     console.log(error);
   }
-  console.log(alreadyInvited);
   if (!alreadyInvited) {
     try {
       await get(
@@ -145,7 +148,6 @@ export const inviteFriend = async (uid: string, playerSenderData: any) => {
     } catch (error: any) {
       console.log(error);
     }
-    console.log(alreadyFriends);
     if (!alreadyFriends) {
       try {
         goOnline(realtime_db);
@@ -160,6 +162,13 @@ export const inviteFriend = async (uid: string, playerSenderData: any) => {
     }
   }
   goOffline(realtime_db);
+
+  if (invited) {
+    socket.emit(`invite_received`, {
+      receivedBy: playerSenderData?.uid,
+      sentTo: uid
+    });
+  }
 
   return invited;
 };
@@ -271,4 +280,27 @@ export const handleUnfriend = async (uid: string, uidFriend: string) => {
   goOffline(realtime_db);
 
   return unfriend;
+};
+
+export const getInvitesPlay = async (uid: string) => {
+  const dbRef = ref(realtime_db);
+  let listFriends: any = [];
+
+  try {
+    goOnline(realtime_db);
+    await get(child(dbRef, `${invitesToPlay}/` + uid))
+      .then((snapshot) => {
+        snapshot.forEach((childSnapshot: any) => {
+          listFriends.push(childSnapshot.val());
+        });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } catch (error: any) {
+    console.log(error);
+  }
+  goOffline(realtime_db);
+
+  return listFriends;
 };

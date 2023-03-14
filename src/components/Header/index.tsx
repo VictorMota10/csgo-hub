@@ -8,6 +8,26 @@ import { Button } from 'antd'
 export const Header = () => {
   const navigate = useNavigate()
 
+  const goToTeam = () => {
+    navigate('/')
+
+    const teamElement = document.getElementById("team") as HTMLDivElement
+    setTimeout(() => {
+      teamElement.scrollIntoView({ block: 'end',  behavior: 'smooth' })
+    }, 500)
+    
+  }
+
+  const goToEvents = () => {
+    navigate('/')
+
+    const teamElement = document.getElementById("events") as HTMLDivElement
+    setTimeout(() => {
+      teamElement.scrollIntoView({ block: 'end',  behavior: 'smooth' })
+    }, 500)
+    
+  }
+
   return (
     <>
       <div className="header__container">
@@ -17,9 +37,9 @@ export const Header = () => {
           </section>
           <section className="area__links">
             <div className="area__first">
-              <a className="header__link" onClick={() => navigate('/home')}>Home</a>
-              <a className="header__link" onClick={() => navigate('/events')}>Events</a>
-              <a className="header__link" onClick={() => navigate('/contact')}>Contact</a>
+              <a className="header__link" onClick={() => navigate('/')}>Home</a>
+              <a className="header__link" onClick={() => goToEvents()}>Events</a>
+              <a className="header__link"  onClick={() => goToTeam()}>Team</a>
             </div>
             <div className="area__account">
               <Button onClick={() => navigate('/login')} type="primary">Sign In</Button>

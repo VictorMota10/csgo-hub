@@ -14,10 +14,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faKey } from '@fortawesome/free-solid-svg-icons';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/userContext';
+import { getSteamData } from '../../firebase-controllers/SteamController';
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 export const Login = () => {
+  const { username, setUsername, steamID, setSteamID, avatar, setAvatar, email, setEmail, uidCurrent, setUidCurrent } = useUser();
+
   const [loadingLogin, setLoadingLogin] = useState(false)
   const [error, setError] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
@@ -50,11 +54,19 @@ export const Login = () => {
 
   const handleUserDataCookies = async (userData: any) => {
     const playerData: any = await getPlayerById(auth.currentUser?.uid || '')
+    const steamData: any = await getSteamData(playerData.playerData?.steamID)
+
+    setUsername(playerData.playerData?.username)
+    setEmail(userData.email)
+    setSteamID(playerData.playerData?.steamID)
+    setUidCurrent(auth.currentUser?.uid)
+    setAvatar(steamData?.steamResponse?.avatar)
 
     document.cookie = `accessToken=${userData.accessToken}`
     document.cookie = `email=${userData.email}`
     document.cookie = `steamID=${playerData.playerData?.steamID}`
     document.cookie = `username=${playerData.playerData?.username}`
+    document.cookie = `avatar=${steamData.steamResponse?.avatar}`
   }
 
   const getMessageError = (errorText: string) => {

@@ -10,10 +10,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import { faGun } from '@fortawesome/free-solid-svg-icons'
 import { getCookie } from '../../../../utils/getCookies'
+import { useNavigate } from 'react-router-dom'
+import { createLobby } from '../../../../firebase-controllers/LobbyController'
+import { useUser } from '../../../../context/userContext'
+import { auth } from '../../../../infra/firebase'
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
 
 export const Home = () => {
+  const { username, setUsername, uidCurrent, avatar } = useUser();
+  const navigate = useNavigate()
+
   const [playerSteamID, setPlayerSteamID] = useState('')
   const [playerStats, setPlayerStats] = useState<any>()
   const [mapsStats, setMapsStats] = useState<any>()
@@ -104,7 +111,23 @@ export const Home = () => {
           openNotification('error', 'Ops!', 'Error on fetching the stats of player.')
         });
     }
+  }
 
+  const handleCreateGroup = async () => {
+    const lobbyID = await createLobby(uidCurrent || auth.currentUser?.uid,
+      { 
+        players: [{ 
+          uid: uidCurrent || auth.currentUser?.uid,
+          isCaptain: true,
+          username: username || getCookie('username'),
+          avatar: avatar || getCookie('avatar')
+        }]
+      }
+    )
+
+    if (lobbyID) {
+      navigate(`/member-area/lobby/id=${lobbyID}`)
+    }
 
   }
 
@@ -130,7 +153,7 @@ export const Home = () => {
             <img src={LogoCSGO} className="logo_csgo" />
           </section>
           <section className="play__area">
-            <Button className='btn__success create__squad'>Create Group</Button>
+            <Button className='btn__success create__squad' onClick={() => handleCreateGroup()}>Create Group</Button>
           </section>
         </div>
 

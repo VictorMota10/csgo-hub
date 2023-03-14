@@ -37,11 +37,11 @@ export const LandingPage = () => {
       <Header />
 
       <div className="content__area">
-        <section className="section__team">
+        <section className="section__team" id="team" >
           <Divider>Team</Divider>
           <Players />
         </section>
-        <section className="section__events">
+        <section className="section__events" id="events">
           <Divider>Events</Divider>
           <Events />
         </section>
