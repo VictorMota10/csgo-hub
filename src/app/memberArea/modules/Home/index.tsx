@@ -1,5 +1,5 @@
 import { LoadingOutlined, ReloadOutlined, UserOutlined } from '@ant-design/icons'
-import { Avatar, Button, Col, Row, Space, notification, Alert, } from 'antd'
+import { Avatar, Button, Col, Row, Space, notification, Alert, Modal, } from 'antd'
 import react, { useEffect, useState } from 'react'
 import './styles.scss'
 
@@ -11,7 +11,7 @@ import { faClock } from '@fortawesome/free-regular-svg-icons'
 import { faGun } from '@fortawesome/free-solid-svg-icons'
 import { getCookie } from '../../../../utils/getCookies'
 import { useNavigate } from 'react-router-dom'
-import { createLobby } from '../../../../firebase-controllers/LobbyController'
+import { checkPlayerAlreadyInLobby, createLobby, getLobbyData, leaveLobby } from '../../../../firebase-controllers/LobbyController'
 import { useUser } from '../../../../context/userContext'
 import { auth } from '../../../../infra/firebase'
 
@@ -28,6 +28,10 @@ export const Home = () => {
   const [loadingStats, setLoadingStats] = useState(false)
   const [loadingWeaponStats, setLoadingWeaponStats] = useState(false)
   const [privateProfileSteam, setPrivateProfileSteam] = useState(false)
+  const [alreadyInAnotherLobby, setAlreadyInAnotherLobby] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [leaveLobbyLoading, setLeaveLobbyLoading] = useState(false)
+  const [alreadyLobbyID, setAlreadyLobbyID] = useState<any>('')
 
   const [api, contextHolder] = notification.useNotification();
 
@@ -114,19 +118,28 @@ export const Home = () => {
   }
 
   const handleCreateGroup = async () => {
-    const lobbyID = await createLobby(uidCurrent || auth.currentUser?.uid,
-      { 
-        players: [{ 
-          uid: uidCurrent || auth.currentUser?.uid,
-          isCaptain: true,
-          username: username || getCookie('username'),
-          avatar: avatar || getCookie('avatar')
-        }]
-      }
-    )
+    const alreadyAnotherLobby = await checkPlayerAlreadyInLobby(uidCurrent || auth.currentUser?.uid)
+    console.log(alreadyAnotherLobby)
 
-    if (lobbyID) {
-      navigate(`/member-area/lobby/id=${lobbyID}`)
+    if (alreadyAnotherLobby?.alreadyExists) {
+      setAlreadyInAnotherLobby(true)
+      setIsModalOpen(true)
+      setAlreadyLobbyID(alreadyAnotherLobby?.lobbyID)
+    } else {
+      const lobbyID = await createLobby(uidCurrent || auth.currentUser?.uid,
+        {
+          players: [{
+            uid: uidCurrent || auth.currentUser?.uid,
+            isCaptain: true,
+            username: username || getCookie('username'),
+            avatar: avatar || getCookie('avatar')
+          }]
+        }
+      )
+
+      if (lobbyID) {
+        navigate(`/member-area/lobby/id=${lobbyID}`)
+      }
     }
 
   }
@@ -138,9 +151,40 @@ export const Home = () => {
     });
   };
 
+  const handleOk = async () => {
+    setLeaveLobbyLoading(true)
+    const lobbyPlayers = await getLobbyData(alreadyLobbyID)
+    const leaved = await leaveLobby(lobbyPlayers, alreadyLobbyID, auth.currentUser?.uid || uidCurrent)
+    if (leaved) {
+      setIsModalOpen(false);
+      setLeaveLobbyLoading(false)
+      setAlreadyLobbyID('')
+    }
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       {contextHolder}
+      <Modal
+        title="You are already in a lobby currently"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          <Button key="submit" type="primary" loading={leaveLobbyLoading} onClick={handleOk}>
+            Yes, leave
+          </Button>,
+        ]}
+      >
+        <p>To create a new group you need to leave the current one, do you want to leave the group?</p>
+      </Modal>
       <div className='content__area--home'>
         <div className='header__home'>
           <section className="player__info">

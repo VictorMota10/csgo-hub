@@ -15,8 +15,30 @@
 
     h3 {
       margin: 0 !important;
-      font-size: 1.4rem;
+      font-size: 1vw;
       color: var(--text-white);
+    }
+
+    .head__lobby--text{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      
+      .ant-tag-success{
+        background-color: transparent;
+      }
+
+      .ant-tag-warning{
+        background-color: transparent;
+      }
+
+      .tag__lobby{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 1.4rem;
+        padding: 0.1rem 0.5rem;
+      }
     }
 
     .squad {
@@ -74,5 +96,15 @@
 
   .lobbys__container {
     width: 80%;
+    display: flex;
+    align-items: start;
+    justify-content: center;
+
+    .result__lobby{
+      
+      .ant-result-title{
+        color: white;
+      }
+    }
   }
 }

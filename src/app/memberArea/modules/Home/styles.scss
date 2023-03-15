@@ -188,6 +188,20 @@
   }
 }
 
+.ant-modal-content{
+  background-color: var(--gray-dark) !important;
+  color: var(--text-white);
+
+  .ant-modal-title{
+    background-color: var(--gray-dark) !important;
+    color: var(--text-white);
+  }
+
+  .ant-modal-close-icon{
+    color: var(--text-white);
+  }
+}
+
 .rotate {
   -webkit-animation: spin1 2s linear;
   -moz-animation: spin1 2s linear;

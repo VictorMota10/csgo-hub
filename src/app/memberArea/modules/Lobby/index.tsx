@@ -1,6 +1,6 @@
 import { faCopy, faCrown, faSignOutAlt, faUserAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Avatar, Badge, Button, Input, List, notification } from 'antd'
+import { Avatar, Badge, Button, Input, List, notification, Result, Tag } from 'antd'
 import react, { useEffect, useState } from 'react'
 import { REACT_APP_URL } from '../../../../utils/urlGlobal'
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,6 +11,7 @@ import { auth } from '../../../../infra/firebase'
 import { getCookie } from '../../../../utils/getCookies'
 import { io } from 'socket.io-client'
 import { SOCKET_SERVER_URL } from '../../../../utils/socketGlobals'
+import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons'
 
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
@@ -28,6 +29,7 @@ export const Lobby = () => {
   const [playersLobby, setPlayersLobby] = useState<any>()
   const [loadingPlayersLobby, setLoadingPlayersLobby] = useState(false)
   const [isCaptain, setIsCaptain] = useState(false)
+  const [lobbyReadyToPlay, setLobbyReadyToPlay] = useState(false)
 
   const handleCopy = () => {
     const inputLink = document.getElementById('link__lobby') as HTMLInputElement
@@ -54,8 +56,19 @@ export const Lobby = () => {
 
   socket.on("player_leave_lobby_front", async (data: any) => {
     if (data.lobbyID === lobbyID) {
-      console.log(data)
       await handleGetUpdateLobby(lobbyID)
+    }
+  });
+
+  socket.on("looby_ready_to_play_front", (data: any) => {
+    if (data.lobbyID === lobbyID) {
+      setLobbyReadyToPlay(true)
+    }
+  });
+
+  socket.on("looby_not_ready_to_play_front", (data: any) => {
+    if (data.lobbyID === lobbyID) {
+      setLobbyReadyToPlay(false)
     }
   });
 
@@ -191,7 +204,15 @@ export const Lobby = () => {
       {contextHolder}
       <div className="container__lobby">
         <section className="players__squad">
-          <h3>Your Lobby</h3>
+          <div className="head__lobby--text">
+            <h3>Lobby</h3>
+            {lobbyReadyToPlay ?
+              <Tag className='tag__lobby' icon={<CheckCircleOutlined />} color="success">
+                Ready
+              </Tag> : <Tag className='tag__lobby' icon={<ClockCircleOutlined />} color="warning">
+                Waiting players
+              </Tag>}
+          </div>
           <article className="squad">
             <List
               loading={loadingPlayersLobby}
@@ -225,7 +246,12 @@ export const Lobby = () => {
             </div>
           </article>
         </section>
-        <section className="lobbys__container">oa</section>
+        <section className="lobbys__container">
+          {!lobbyReadyToPlay ?
+            <Result className="result__lobby"
+              title="Your lobby needs to have 5 players to list other lobbies to challenge..."
+            /> : 'LISTA LOBBIES'}
+        </section>
       </div>
     </>
   )
