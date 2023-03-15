@@ -145,9 +145,9 @@ export const Home = () => {
         <div className='header__home'>
           <section className="player__info">
             <div className="player__avatar">
-              <Avatar size="large" icon={playerStats?.platformInfo ? <img src={playerStats?.platformInfo?.avatarUrl} /> : <UserOutlined />} />
+              <Avatar size="large" src={playerStats?.platformInfo?.avatarUrl || avatar} />
             </div>
-            <h3>{playerStats?.platformInfo?.platformUserHandle}</h3>
+            <h3>{playerStats?.platformInfo?.platformUserHandle || username}</h3>
           </section>
           <section className="middle_area">
             <img src={LogoCSGO} className="logo_csgo" />
