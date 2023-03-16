@@ -76,21 +76,48 @@
         }
       }
 
-      .leave__area{
-        .leave__lobby{
-          background-color: var(--red-light);
+      .ready__area{
+        width: 100%;
+        height: 40%;
+        display: flex;
+        align-items: end;
+        padding: 2rem 0 0;
+        .ready__play{
+          background-color: var(--green-light);
           border: none;
           color: var(--text-white);
           height: 2.6rem;
           width: 100%;
+
+          &:disabled{
+            background-color: var(--text-gray);
+          }
         }
 
-        width: 100%;
-        height: 20%;
-        display: flex;
-        flex-direction: column;
-        justify-content: end;
+        .not__ready__play{
+          background-color: var(--yellow-light);
+          border: none;
+          color: var(--blue-dark);
+          height: 2.6rem;
+          width: 100%;
+        }
       }
+    }
+
+    .leave__area{
+      .leave__lobby{
+        background-color: var(--red-light);
+        border: none;
+        color: var(--text-white);
+        height: 2.6rem;
+        width: 100%;
+      }
+
+      width: 100%;
+      height: 20%;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
     }
   }
 

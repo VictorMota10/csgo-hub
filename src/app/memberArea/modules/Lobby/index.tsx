@@ -5,7 +5,7 @@ import react, { useEffect, useState } from 'react'
 import { REACT_APP_URL } from '../../../../utils/urlGlobal'
 import { useNavigate, useParams } from "react-router-dom";
 import './styles.scss'
-import { closeLobby, getLobbyData, insertPlayerOnLobby, leaveLobby } from '../../../../firebase-controllers/LobbyController'
+import { closeLobby, getLobbyData, insertPlayerOnLobby, leaveLobby, setLobbyReady, setLobbyUnReady } from '../../../../firebase-controllers/LobbyController'
 import { useUser } from '../../../../context/userContext'
 import { auth } from '../../../../infra/firebase'
 import { getCookie } from '../../../../utils/getCookies'
@@ -30,6 +30,7 @@ export const Lobby = () => {
   const [loadingPlayersLobby, setLoadingPlayersLobby] = useState(false)
   const [isCaptain, setIsCaptain] = useState(false)
   const [lobbyReadyToPlay, setLobbyReadyToPlay] = useState(false)
+  const [realLobbyPlayers, setRealLobbyPlayers] = useState<any>()
 
   const handleCopy = () => {
     const inputLink = document.getElementById('link__lobby') as HTMLInputElement
@@ -199,6 +200,31 @@ export const Lobby = () => {
     });
   };
 
+  const handleReady = async () => {
+    const lobbyReady = await setLobbyReady(lobbyID, realLobbyPlayers)
+    if(lobbyReady){
+      setLobbyReadyToPlay(true)
+      return
+    }
+  }
+
+  const handleUnReady = async () => {
+    const lobbyUnReady = await setLobbyUnReady(lobbyID)
+    if(lobbyUnReady){
+      setLobbyReadyToPlay(false)
+      return
+    }
+  }
+
+  useEffect(() => {
+    if (playersLobby) {
+      const realPlayers: any = playersLobby?.filter((player: any) => {
+        return player?.avatar !== '' && player?.uid
+      })
+      setRealLobbyPlayers(realPlayers)
+    }
+  }, [playersLobby])
+
   return (
     <>
       {contextHolder}
@@ -239,17 +265,30 @@ export const Lobby = () => {
               <Input id="link__lobby" value={`${REACT_APP_URL}/member-area/lobby/id=${lobbyID}`} />
               <Button onClick={() => handleCopy()}><FontAwesomeIcon icon={faCopy} /></Button>
             </div>
-            <div className="leave__area">
-              <Button className="leave__lobby" onClick={() => { !isCaptain ? handleLeaveLobby() : handleCloseLobby(lobbyID || '') }}>
-                <FontAwesomeIcon style={{ transform: 'rotate(180deg)', marginRight: '1rem' }} icon={faSignOutAlt} /> {!isCaptain ? 'Leave lobby' : 'Close lobby'}
-              </Button>
-            </div>
+            {isCaptain && (
+              <div className="ready__area">
+                {!lobbyReadyToPlay ?
+                  <Button className="ready__play" onClick={() => handleReady()} disabled={realLobbyPlayers?.length !== 5}>
+                    Show Lobbies
+                  </Button>
+                  :
+                  <Button className="not__ready__play" onClick={() => handleUnReady()}>
+                    Hide Lobbies
+                  </Button>
+                }
+              </div>
+            )}
           </article>
+          <div className="leave__area">
+            <Button className="leave__lobby" onClick={() => { !isCaptain ? handleLeaveLobby() : handleCloseLobby(lobbyID || '') }}>
+              <FontAwesomeIcon style={{ transform: 'rotate(180deg)', marginRight: '1rem' }} icon={faSignOutAlt} /> {!isCaptain ? 'Leave lobby' : 'Close lobby'}
+            </Button>
+          </div>
         </section>
         <section className="lobbys__container">
           {!lobbyReadyToPlay ?
             <Result className="result__lobby"
-              title="Your lobby needs to have 5 players to list other lobbies to challenge..."
+              title="Your lobby needs to have 5 players and [Show Lobbies] actived to list other lobbies to challenge..."
             /> : 'LISTA LOBBIES'}
         </section>
       </div>

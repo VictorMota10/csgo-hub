@@ -9,7 +9,7 @@ import {
 } from "firebase/database";
 import { io } from "socket.io-client";
 import { realtime_db } from "../infra/firebase";
-import { lobbies } from "../utils/databaseNames";
+import { lobbies, lobbiesReady } from "../utils/databaseNames";
 import uuid from "react-uuid";
 import { SOCKET_SERVER_URL } from "../utils/socketGlobals";
 
@@ -103,12 +103,6 @@ export const insertPlayerOnLobby = async (
     });
   }
 
-  if(playersData?.length === 5){
-    socket.emit(`looby_ready_to_play`, {
-      lobbyID: lobbyID,
-    });
-  }
-
   return playerJoin;
 };
 
@@ -168,4 +162,46 @@ export const leaveLobby = async (
   }
 
   return leaved;
+};
+
+export const setLobbyReady = async (lobbyID: string, playersData: any) => {
+  let lobbyReady = false;
+
+  // Insere player na lobby
+  await set(ref(realtime_db, `${lobbiesReady}/${lobbyID}/players`), playersData)
+    .then(() => {
+      lobbyReady = true;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  if (lobbyReady) {
+    await socket.emit(`looby_ready_to_play`, {
+      lobbyID: lobbyID,
+    });
+  }
+
+  return lobbyReady;
+};
+
+export const setLobbyUnReady = async (lobbyID: string) => {
+  let lobbyUnReady = false;
+
+  // Insere player na lobby
+  await remove(ref(realtime_db, `${lobbiesReady}/${lobbyID}`))
+    .then(() => {
+      lobbyUnReady = true;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  if (lobbyUnReady) {
+    await socket.emit(`looby_not_ready_to_play`, {
+      lobbyID: lobbyID,
+    });
+  }
+
+  return lobbyUnReady;
 };
