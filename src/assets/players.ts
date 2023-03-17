@@ -1,3 +1,5 @@
+import FotoTankprof from '../../src/assets/players/eu.png'
+
 export const players = [
   {
     name: "Lincoln",
@@ -5,7 +7,7 @@ export const players = [
     nick: "Tankprof",
     steam: "https://steamcommunity.com/id/Tankprof/",
     steamID: "STEAM_0:0:54067554",
-    avatar: '../../src/assets/players/eu.png',
+    avatar: FotoTankprof,
   },
   {
     name: "Jinho",
