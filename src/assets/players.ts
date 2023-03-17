@@ -5,7 +5,7 @@ export const players = [
     nick: "Tankprof",
     steam: "https://steamcommunity.com/id/Tankprof/",
     steamID: "STEAM_0:0:54067554",
-    avatar: "../src/assets/players/eu.png",
+    avatar: '../../src/assets/players/eu.png',
   },
   {
     name: "Jinho",
@@ -13,7 +13,7 @@ export const players = [
     nick: "jiNhooo;",
     steam: "https://steamcommunity.com/id/jiNhooo",
     steamID: "STEAM_0:0:9541513",
-    avatar: "../src/assets/players/jinho.png",
+    avatar: "../../src/assets/players/jinho.png",
   },
   {
     name: "Breno",
@@ -21,7 +21,7 @@ export const players = [
     nick: "Alien",
     steam: "https://steamcommunity.com/id/bbalien",
     steamID: "STEAM_0:1:163351691",
-    avatar: "../src/assets/players/alien.png",
+    avatar: "../../src/assets/players/alien.png",
   },
   {
     name: "Willian",
@@ -29,7 +29,7 @@ export const players = [
     nick: "WillCRK",
     steam: "https://steamcommunity.com/profiles/76561198045395912",
     steamID: "STEAM_0:0:42565092",
-    avatar: "../src/assets/players/will.png",
+    avatar: "../../src/assets/players/will.png",
   },
   {
     name: "Danilo",
@@ -37,7 +37,7 @@ export const players = [
     nick: "daoXP",
     steam: "https://steamcommunity.com/id/danilodao",
     steamID: "STEAM_0:0:228026000",
-    avatar: "../src/assets/players/dao.png",
+    avatar: "../../src/assets/players/dao.png",
   },
   {
     name: "Breno",
@@ -45,7 +45,7 @@ export const players = [
     nick: "coLBlind",
     steam: "https://steamcommunity.com/profiles/76561198823866057",
     steamID: "",
-    avatar: "../src/assets/players/rossini.png",
+    avatar: "../../src/assets/players/rossini.png",
   },
   {
     name: "Victor",
@@ -53,7 +53,7 @@ export const players = [
     nick: "ONEMOTA-TAPS",
     steam: "https://steamcommunity.com/id/Onemota1",
     steamID: "STEAM_0:0:531636198",
-    avatar: "../src/assets/players/motta.png",
+    avatar: "../../src/assets/players/motta.png",
   },
   {
     name: "Rafael",
@@ -61,7 +61,7 @@ export const players = [
     nick: "RafZenz",
     steam: "https://steamcommunity.com/id/rafzenz",
     steamID: "STEAM_0:0:210160962",
-    avatar: "../src/assets/players/rafa.jpg",
+    avatar: "../../src/assets/players/rafa.jpg",
   },
   {
     name: "Gustavo",
@@ -69,7 +69,7 @@ export const players = [
     nick: "portuga",
     steam: "https://steamcommunity.com/profiles/76561198048276395",
     steamID: "STEAM_0:1:44005333",
-    avatar: "../src/assets/players/simoes.jpg",
+    avatar: "../../src/assets/players/simoes.jpg",
   },
   {
     name: "Lucas",
@@ -77,7 +77,7 @@ export const players = [
     nick: "Segala!?",
     steam: "https://steamcommunity.com/profiles/76561198954563779",
     steamID: "STEAM_0:1:497149025",
-    avatar: "../src/assets/players/segalla.png",
+    avatar: "../../src/assets/players/segalla.png",
   },
   {
     name: "Matheus",
@@ -85,7 +85,7 @@ export const players = [
     nick: "Droga é o Braia",
     steam: "https://steamcommunity.com/id/Iugas",
     steamID: "STEAM_0:1:21971468",
-    avatar: "../src/assets/players/iugas.png",
+    avatar: "../../src/assets/players/iugas.png",
   },
   {
     name: "Thiago",
@@ -93,7 +93,7 @@ export const players = [
     nick: "Beckerrr",
     steam: "https://steamcommunity.com/id/BkrT-",
     steamID: "STEAM_0:1:54294926",
-    avatar: "../src/assets/players/backer.jpg",
+    avatar: "../../src/assets/players/backer.jpg",
   },
   {
     name: "Rodrigo",
@@ -101,7 +101,7 @@ export const players = [
     nick: "emidinhu",
     steam: "https://steamcommunity.com/profiles/76561197988016364",
     steamID: "STEAM_0:0:13875318",
-    avatar: "../src/assets/players/emidinho.jpg",
+    avatar: "../../src/assets/players/emidinho.jpg",
   },
   {
     name: "Marcella",
@@ -109,7 +109,7 @@ export const players = [
     nick: "✿ Rosinha ♥",
     steam: "https://steamcommunity.com/id/mamarcucci",
     steamID: "STEAM_0:0:194512094",
-    avatar: "../src/assets/players/ma.png",
+    avatar: "../../src/assets/players/ma.png",
   },
   {
     name: "Matheus",
@@ -117,7 +117,7 @@ export const players = [
     nick: "ÐogmA",
     steam: "https://steamcommunity.com/profiles/76561198062409874",
     steamID: "76561198062409874",
-    avatar: "../src/assets/players/matheus.png",
+    avatar: "../../src/assets/players/matheus.png",
   },
   {
     name: "Guilherme",
@@ -125,7 +125,7 @@ export const players = [
     nick: "Peluda",
     steam: "https://steamcommunity.com/profiles/76561198072909890/",
     steamID: "STEAM_0:0:56322081",
-    avatar: "../src/assets/players/peluda.png",
+    avatar: "../../src/assets/players/peluda.png",
   },
   {
     name: "Eduardo",

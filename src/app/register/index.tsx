@@ -174,7 +174,7 @@ export const Register = () => {
                   <Col span={12}>
                     <Input
                       name="steamID"
-                      label="SteamID"
+                      label="SteamID64"
                       labelColor='var(--text-white)'
                       required
                       type="text"
