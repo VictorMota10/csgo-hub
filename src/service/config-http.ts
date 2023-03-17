@@ -1,4 +1,4 @@
-const SERVER_API = 'http://localhost:8080'
+const SERVER_API = 'https://app-47983.dc-us-1.absamcloud.com'
 
 export const SEARCH_BY_STEAM_ID = `${SERVER_API}/steam/`
 

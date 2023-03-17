@@ -5,7 +5,7 @@ import './styles.scss'
 
 import LogoCSGO from '../../../../assets/logo_csgo.png'
 import axios from 'axios'
-import { GET_STATS_STEAM_PLAYER, TRN_STEAM_API } from '../../../../service/config-http'
+import { GET_STATS_STEAM_PLAYER } from '../../../../service/config-http'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faClock } from '@fortawesome/free-regular-svg-icons'
 import { faGun } from '@fortawesome/free-solid-svg-icons'
@@ -159,6 +159,7 @@ export const Home = () => {
       setIsModalOpen(false);
       setLeaveLobbyLoading(false)
       setAlreadyLobbyID('')
+      handleCreateGroup()
     }
   };
 
@@ -189,15 +190,15 @@ export const Home = () => {
         <div className='header__home'>
           <section className="player__info">
             <div className="player__avatar">
-              <Avatar size="large" src={playerStats?.platformInfo?.avatarUrl || avatar} />
+              <Avatar size="large" src={playerStats?.platformInfo?.avatarUrl || avatar || getCookie('avatar')} />
             </div>
-            <h3>{playerStats?.platformInfo?.platformUserHandle || username}</h3>
+            <h3>{playerStats?.platformInfo?.platformUserHandle || username || getCookie('username')}</h3>
           </section>
           <section className="middle_area">
             <img src={LogoCSGO} className="logo_csgo" />
           </section>
           <section className="play__area">
-            <Button className='btn__success create__squad' onClick={() => handleCreateGroup()}>Create Group</Button>
+            <Button className='btn__success create__squad' onClick={handleCreateGroup}>Create Group</Button>
           </section>
         </div>
 

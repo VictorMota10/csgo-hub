@@ -1,1 +1,1 @@
-export const SOCKET_SERVER_URL = 'http://localhost:8080'
+export const SOCKET_SERVER_URL = 'https://app-47983.dc-us-1.absamcloud.com/'

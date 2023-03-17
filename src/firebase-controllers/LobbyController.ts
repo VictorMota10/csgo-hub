@@ -35,6 +35,8 @@ export const getLobbyData = async (lobbyID: string) => {
   const dbRef = ref(realtime_db);
   let lobbyData: any;
 
+  goOnline(realtime_db);
+
   await get(child(dbRef, `${lobbies}/${lobbyID}`))
     .then((snapshot) => {
       snapshot.forEach((childSnapshot: any) => {
@@ -47,6 +49,7 @@ export const getLobbyData = async (lobbyID: string) => {
     });
 
   return lobbyData;
+  goOffline(realtime_db);
 };
 
 export const checkPlayerAlreadyInLobby = async (uidPlayer: string) => {
@@ -54,6 +57,7 @@ export const checkPlayerAlreadyInLobby = async (uidPlayer: string) => {
   let lobbiesData: any;
   let lobbyIDAlreadyExists: string = "";
   let alreadyExists: boolean = false;
+  goOnline(realtime_db);
 
   await get(child(dbRef, `${lobbies}`))
     .then((snapshot) => {
@@ -62,6 +66,7 @@ export const checkPlayerAlreadyInLobby = async (uidPlayer: string) => {
     .catch((error) => {
       console.error(error);
     });
+  goOffline(realtime_db);
 
   if (lobbiesData) {
     Object.keys(lobbiesData).forEach((item: any) => {
@@ -86,6 +91,7 @@ export const insertPlayerOnLobby = async (
   playersData: any
 ) => {
   let playerJoin = false;
+  goOnline(realtime_db);
 
   // Insere player na lobby
   await set(ref(realtime_db, `${lobbies}/${lobbyID}/players`), playersData)
@@ -95,6 +101,7 @@ export const insertPlayerOnLobby = async (
     .catch((error) => {
       console.error(error);
     });
+  goOffline(realtime_db);
 
   if (playerJoin) {
     socket.emit(`player_join_lobby`, {

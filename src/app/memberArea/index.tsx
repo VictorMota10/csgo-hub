@@ -34,7 +34,7 @@ export const MemberArea = ({ children }: { children: JSX.Element }) => {
 
   socket.on("player_join_lobby_front", (data: any) => {
     if (data?.sentTo === auth.currentUser?.uid) {
-      openNotification('info', 'Info', 'You just received a friend request...')
+      openNotification('info', 'Info', '1...')
     }
   });
 

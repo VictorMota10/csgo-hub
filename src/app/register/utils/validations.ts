@@ -9,6 +9,11 @@ const regexPassword = new RegExp(
 );
 
 export const validations = object().shape({
+  firstName: string().required(REQUIRED_FIELD_MESSAGE),
+  lastName: string().required(REQUIRED_FIELD_MESSAGE),
+  username: string().required(REQUIRED_FIELD_MESSAGE),
+  steamID: string().required(REQUIRED_FIELD_MESSAGE),
+  email: string().required(REQUIRED_FIELD_MESSAGE),
   password: string()
     .required(REQUIRED_FIELD_MESSAGE)
     .min(8, "At least 8 characters.")
