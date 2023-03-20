@@ -4,6 +4,7 @@ import { Avatar, List, notification } from 'antd'
 import react, { useEffect, useState } from 'react'
 import { getFriendList, handleUnfriend } from '../../../../../firebase-controllers/PlayerController';
 import { auth } from '../../../../../infra/firebase';
+import { getCookie } from '../../../../../utils/getCookies';
 import './styles.scss'
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
@@ -17,7 +18,7 @@ export const ListFriends = () => {
     setData([])
     let listOfFriendsArray: any = []
 
-    const myUid = auth.currentUser?.uid || ''
+    const myUid = auth.currentUser?.uid || getCookie('uid') || ''
     const listOfFriends = await getFriendList(myUid)
 
     if (Object.entries(listOfFriends).length > 0) {

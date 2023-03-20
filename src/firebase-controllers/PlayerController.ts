@@ -9,7 +9,12 @@ import {
 } from "firebase/database";
 import { io } from "socket.io-client";
 import { realtime_db } from "../infra/firebase";
-import { friendInvites, friendList, invitesToPlay, users } from "../utils/databaseNames";
+import {
+  friendInvites,
+  friendList,
+  invitesToPlay,
+  users,
+} from "../utils/databaseNames";
 import { getCookie } from "../utils/getCookies";
 import { SOCKET_SERVER_URL } from "../utils/socketGlobals";
 
@@ -166,7 +171,7 @@ export const inviteFriend = async (uid: string, playerSenderData: any) => {
   if (invited) {
     socket.emit(`invite_received`, {
       receivedBy: playerSenderData?.uid,
-      sentTo: uid
+      sentTo: uid,
     });
   }
 
@@ -247,21 +252,16 @@ export const getFriendList = async (uid: string) => {
   const dbRef = ref(realtime_db);
   let listFriends: any = [];
 
-  try {
-    goOnline(realtime_db);
-    await get(child(dbRef, `${friendList}/` + uid))
-      .then((snapshot) => {
-        snapshot.forEach((childSnapshot: any) => {
-          listFriends.push(childSnapshot.val());
-        });
-      })
-      .catch((error) => {
-        console.error(error);
+  await get(child(dbRef, `${friendList}/` + uid))
+    .then((snapshot) => {
+      console.log(snapshot.val());
+      snapshot.forEach((childSnapshot: any) => {
+        listFriends.push(childSnapshot.val());
       });
-  } catch (error: any) {
-    console.log(error);
-  }
-  goOffline(realtime_db);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 
   return listFriends;
 };

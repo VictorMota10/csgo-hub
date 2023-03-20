@@ -67,6 +67,7 @@ export const Login = () => {
     document.cookie = `steamID=${playerData.playerData?.steamID}`
     document.cookie = `username=${playerData.playerData?.username}`
     document.cookie = `avatar=${steamData.steamResponse?.avatar}`
+    document.cookie = `uid=${playerData.playerData?.uid}`
   }
 
   const getMessageError = (errorText: string) => {
