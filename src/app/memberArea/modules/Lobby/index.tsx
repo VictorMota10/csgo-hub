@@ -1,17 +1,17 @@
 import { faCopy, faCrown, faSignOutAlt, faUserAlt } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Avatar, Badge, Button, Input, List, notification, Result, Tag } from 'antd'
+import { Avatar, Badge, Button, Col, Input, List, notification, Result, Row, Tag, Tooltip } from 'antd'
 import react, { useEffect, useState } from 'react'
 import { REACT_APP_URL } from '../../../../utils/urlGlobal'
 import { useNavigate, useParams } from "react-router-dom";
 import './styles.scss'
-import { closeLobby, getLobbyData, insertPlayerOnLobby, leaveLobby, setLobbyReady, setLobbyUnReady } from '../../../../firebase-controllers/LobbyController'
+import { closeLobby, getLobbyData, handleListLobbiesReady, insertPlayerOnLobby, leaveLobby, setChallengeLobby, setLobbyReady, setLobbyUnReady } from '../../../../firebase-controllers/LobbyController'
 import { useUser } from '../../../../context/userContext'
 import { auth } from '../../../../infra/firebase'
 import { getCookie } from '../../../../utils/getCookies'
 import { io } from 'socket.io-client'
 import { SOCKET_SERVER_URL } from '../../../../utils/socketGlobals'
-import { CheckCircleOutlined, ClockCircleOutlined } from '@ant-design/icons'
+import { AntDesignOutlined, CheckCircleOutlined, ClockCircleOutlined, UserOutlined } from '@ant-design/icons'
 
 
 type NotificationType = 'success' | 'info' | 'warning' | 'error';
@@ -31,6 +31,7 @@ export const Lobby = () => {
   const [isCaptain, setIsCaptain] = useState(false)
   const [lobbyReadyToPlay, setLobbyReadyToPlay] = useState(false)
   const [realLobbyPlayers, setRealLobbyPlayers] = useState<any>()
+  const [lobbiesReady, setLobbiesReady] = useState([]);
 
   const handleCopy = () => {
     const inputLink = document.getElementById('link__lobby') as HTMLInputElement
@@ -187,7 +188,6 @@ export const Lobby = () => {
 
   useEffect(() => {
     if (lobbyID !== '') {
-      setLoadingPlayersLobby(true)
       handleGetLobbyData(lobbyID)
     }
   }, [lobbyID])
@@ -201,8 +201,9 @@ export const Lobby = () => {
   };
 
   const handleReady = async () => {
-    const lobbyReady = await setLobbyReady(lobbyID, realLobbyPlayers)
-    if(lobbyReady){
+    const myLobbyName = `Team ${username || getCookie('username')}`
+    const lobbyReady = await setLobbyReady(lobbyID, myLobbyName, realLobbyPlayers)
+    if (lobbyReady) {
       setLobbyReadyToPlay(true)
       return
     }
@@ -210,7 +211,7 @@ export const Lobby = () => {
 
   const handleUnReady = async () => {
     const lobbyUnReady = await setLobbyUnReady(lobbyID)
-    if(lobbyUnReady){
+    if (lobbyUnReady) {
       setLobbyReadyToPlay(false)
       return
     }
@@ -224,6 +225,26 @@ export const Lobby = () => {
       setRealLobbyPlayers(realPlayers)
     }
   }, [playersLobby])
+
+  const getListLobbiesReady = async () => {
+    const listLobbiesReady = await handleListLobbiesReady(auth.currentUser?.uid || getCookie('uid'))
+    if (listLobbiesReady?.length > 0) {
+      const filteredLobbies = listLobbiesReady?.filter((lobby: any) => lobby?.lobbyID !== lobbyID)
+      setLobbiesReady(filteredLobbies)
+      console.log(filteredLobbies)
+    }
+  }
+
+  useEffect(() => {
+    if (lobbyReadyToPlay) {
+      getListLobbiesReady()
+    }
+  }, [lobbyReadyToPlay])
+
+  const handleChallenge = async (lobbyName: string, lobbyToChallenge: string) => {
+    console.log(lobbyID, lobbyName, lobbyToChallenge)
+    const lobbyChallenged = await setChallengeLobby(lobbyID, lobbyName, lobbyToChallenge)
+  }
 
   return (
     <>
@@ -268,7 +289,7 @@ export const Lobby = () => {
             {isCaptain && (
               <div className="ready__area">
                 {!lobbyReadyToPlay ?
-                  <Button className="ready__play" onClick={() => handleReady()} disabled={realLobbyPlayers?.length !== 5}>
+                  <Button className="ready__play" onClick={() => handleReady()} >
                     Show Lobbies
                   </Button>
                   :
@@ -289,7 +310,42 @@ export const Lobby = () => {
           {!lobbyReadyToPlay ?
             <Result className="result__lobby"
               title="Your lobby needs to have 5 players and [Show Lobbies] actived to list other lobbies to challenge..."
-            /> : 'LISTA LOBBIES'}
+            /> :
+            <>
+              <section className="lobbies__ready">
+                <Row gutter={[16, 16]} style={{ width: '100%' }}>
+                  {lobbiesReady?.map((lobby: any, key: any) => {
+                    return (
+                        <Col key={key} className="gutter-row" span={6}>
+                          <div className='lobby__card'>
+                            <h3>{lobby?.lobbyName}</h3>
+                            <div className='list__players'>
+                              <Avatar.Group>
+                                {lobby?.lobbyDetails?.players?.map((player: any, key: any) => {
+                                  return (
+                                    <>
+                                      <Tooltip title={player?.username} placement="top">
+                                        <Avatar key={key} size="large" icon={<img src={player?.avatar} /> || <UserOutlined />} />
+                                      </Tooltip>
+                                    </>
+                                  )
+                                })}
+                              </Avatar.Group>
+                            </div>
+                            <div className="challenge__container">
+                              <Button className='btn__challenge' onClick={(e) => handleChallenge(lobby?.lobbyName, lobby?.lobbyID)}>Challenge</Button>
+                            </div>
+                          </div>
+                        </Col>
+                    )
+                  })}
+                </Row>
+              </section>
+            </>
+          }
+        </section>
+        <section className="challengers__squads">
+
         </section>
       </div>
     </>

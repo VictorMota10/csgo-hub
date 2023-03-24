@@ -9,7 +9,11 @@ import {
 } from "firebase/database";
 import { io } from "socket.io-client";
 import { realtime_db } from "../infra/firebase";
-import { lobbies, lobbiesReady } from "../utils/databaseNames";
+import {
+  lobbies,
+  lobbiesChallenged,
+  lobbiesReady,
+} from "../utils/databaseNames";
 import uuid from "react-uuid";
 import { SOCKET_SERVER_URL } from "../utils/socketGlobals";
 
@@ -48,8 +52,9 @@ export const getLobbyData = async (lobbyID: string) => {
       console.error(error);
     });
 
-  return lobbyData;
   goOffline(realtime_db);
+
+  return lobbyData;
 };
 
 export const checkPlayerAlreadyInLobby = async (uidPlayer: string) => {
@@ -171,17 +176,25 @@ export const leaveLobby = async (
   return leaved;
 };
 
-export const setLobbyReady = async (lobbyID: string, playersData: any) => {
+export const setLobbyReady = async (
+  lobbyID: string,
+  lobbyName: string,
+  playersData: any
+) => {
   let lobbyReady = false;
 
-  // Insere player na lobby
-  await set(ref(realtime_db, `${lobbiesReady}/${lobbyID}/players`), playersData)
+  goOnline(realtime_db);
+  await set(ref(realtime_db, `${lobbiesReady}/${lobbyID}`), {
+    lobbyName: lobbyName,
+    players: playersData,
+  })
     .then(() => {
       lobbyReady = true;
     })
     .catch((error) => {
       console.error(error);
     });
+  goOffline(realtime_db);
 
   if (lobbyReady) {
     await socket.emit(`looby_ready_to_play`, {
@@ -194,7 +207,7 @@ export const setLobbyReady = async (lobbyID: string, playersData: any) => {
 
 export const setLobbyUnReady = async (lobbyID: string) => {
   let lobbyUnReady = false;
-
+  goOnline(realtime_db);
   // Insere player na lobby
   await remove(ref(realtime_db, `${lobbiesReady}/${lobbyID}`))
     .then(() => {
@@ -203,6 +216,7 @@ export const setLobbyUnReady = async (lobbyID: string) => {
     .catch((error) => {
       console.error(error);
     });
+  goOffline(realtime_db);
 
   if (lobbyUnReady) {
     await socket.emit(`looby_not_ready_to_play`, {
@@ -211,4 +225,90 @@ export const setLobbyUnReady = async (lobbyID: string) => {
   }
 
   return lobbyUnReady;
+};
+
+export const handleListLobbiesReady = async (myUid: any) => {
+  const dbRef = ref(realtime_db);
+  let lobbies: any = [];
+  let otherLobbies: any = [];
+  goOnline(realtime_db);
+
+  await get(child(dbRef, `${lobbiesReady}`))
+    .then((snapshot) => {
+      lobbies = snapshot.val();
+
+      Object.keys(lobbies).forEach(function (item) {
+        otherLobbies.push({
+          lobbyID: item,
+          lobbyName: lobbies[item]?.lobbyName,
+          lobbyDetails: lobbies[item],
+        });
+      });
+
+      return otherLobbies;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+
+  goOffline(realtime_db);
+
+  return otherLobbies;
+};
+
+export const setChallengeLobby = async (
+  myLobbyID: string,
+  lobbyName: string,
+  lobbyIDChallenged: string
+) => {
+  goOnline(realtime_db);
+  const dbRef = ref(realtime_db);
+  let lobbiesChallended: any;
+  let lobbyChallenged: boolean = false;
+  console.log(`${lobbiesChallenged}/${lobbyIDChallenged}`);
+
+  try {
+    await get(child(dbRef, `${lobbiesChallenged}/${lobbyIDChallenged}`))
+      .then((snapshot) => {
+        lobbiesChallended = snapshot.val();
+        console.log("lobbies: ", lobbiesChallended);
+        snapshot.forEach((childSnapshot: any) => {
+          console.log("teste: ", childSnapshot.val());
+        });
+        // Object.keys(lobbies).forEach(function (item) {
+        //   otherLobbies.push({
+        //     lobbyID: item,
+        //     lobbyName: lobbies[item]?.lobbyName,
+        //     lobbyDetails: lobbies[item],
+        //   });
+        // });
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } catch (error) {
+    console.error(error);
+  }
+
+  // ninguem desafiou ainda essa lobby
+  if (!lobbiesChallended) {
+    await set(ref(realtime_db, `${lobbiesChallenged}/${lobbyIDChallenged}`), [
+      {
+        lobbyName: lobbyName,
+        lobbyID: myLobbyID,
+      },
+    ])
+      .then(() => {
+        lobbyChallenged = true;
+        return lobbyChallenged;
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  } else {
+    console.log("ja tem desafios");
+  }
+  goOffline(realtime_db);
+
+  return lobbyChallenged;
 };

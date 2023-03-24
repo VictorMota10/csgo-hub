@@ -128,6 +128,7 @@ export const Home = () => {
     } else {
       const lobbyID = await createLobby(uidCurrent || auth.currentUser?.uid,
         {
+          lobbyName: `Team ${username || getCookie('username')}`,
           players: [{
             uid: uidCurrent || auth.currentUser?.uid,
             isCaptain: true,

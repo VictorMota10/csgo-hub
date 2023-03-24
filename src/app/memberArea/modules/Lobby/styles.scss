@@ -6,7 +6,7 @@
   height: 100%;
 
   .players__squad {
-    width: 18%;
+    width: 16%;
     height: 60%;
     background-color: var(--gray-dark);
     padding: 1rem;
@@ -19,20 +19,20 @@
       color: var(--text-white);
     }
 
-    .head__lobby--text{
+    .head__lobby--text {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      
-      .ant-tag-success{
+
+      .ant-tag-success {
         background-color: transparent;
       }
 
-      .ant-tag-warning{
+      .ant-tag-warning {
         background-color: transparent;
       }
 
-      .tag__lobby{
+      .tag__lobby {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -48,17 +48,16 @@
       flex-direction: column;
       justify-content: space-between;
 
-      .fa-crown{
-        color: #FFB800;
+      .fa-crown {
+        color: #ffb800;
       }
 
-      .clipboard__link{
+      .clipboard__link {
         display: flex;
         justify-content: space-between;
         padding-top: 2rem;
-        
 
-        .ant-input{
+        .ant-input {
           width: 80% !important;
           background-color: #4b4e5e;
           border: none !important;
@@ -76,25 +75,25 @@
         }
       }
 
-      .ready__area{
+      .ready__area {
         width: 100%;
         height: 40%;
         display: flex;
         align-items: end;
         padding: 2rem 0 0;
-        .ready__play{
+        .ready__play {
           background-color: var(--green-light);
           border: none;
           color: var(--text-white);
           height: 2.6rem;
           width: 100%;
 
-          &:disabled{
+          &:disabled {
             background-color: var(--text-gray);
           }
         }
 
-        .not__ready__play{
+        .not__ready__play {
           background-color: var(--yellow-light);
           border: none;
           color: var(--blue-dark);
@@ -104,8 +103,8 @@
       }
     }
 
-    .leave__area{
-      .leave__lobby{
+    .leave__area {
+      .leave__lobby {
         background-color: var(--red-light);
         border: none;
         color: var(--text-white);
@@ -122,16 +121,97 @@
   }
 
   .lobbys__container {
-    width: 80%;
+    width: 66%;
     display: flex;
     align-items: start;
     justify-content: center;
+    max-height: 94vh;
 
-    .result__lobby{
-      
-      .ant-result-title{
+    .lobbies__ready {
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+      overflow-x: auto;
+      max-height: 94vh;
+
+      -webkit-mask-image: linear-gradient(180deg, #000 96%, transparent);
+
+      &::-webkit-scrollbar {
+        width: 16px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: var(--blue-input) !important;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: var(--text-gray);
+        border-radius: 10px;
+        border: 3px solid var(--blue-input);
+      }
+
+      .lobby__card {
+        background-color: var(--gray-dark);
+        border-radius: 14px;
+        height: 20vh;
+        width: 100%;
+        padding: 5% 0 0;
+
+        h3 {
+          padding: 0 0 1rem !important;
+          margin: 0 !important;
+          font-size: 1.2rem;
+          display: flex;
+          width: 100%;
+          justify-content: center;
+          text-align: center;
+          color: var(--text-white);
+          height: 20%;
+        }
+        .challenge__container {
+          display: flex;
+          width: 100%;
+          padding: 6% 4% 2%;
+          height: 35%;
+
+          .btn__challenge {
+            border: none;
+            background-color: var(--green-light);
+            color: var(--text-white) !important;
+            display: flex;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+          }
+        }
+
+        .list__players {
+          padding: 0.4rem;
+          justify-content: center;
+          display: flex;
+          align-items: center;
+          height: 40%;
+
+          .ant-avatar-group .ant-avatar {
+            border: none;
+          }
+        }
+      }
+    }
+
+    .result__lobby {
+      .ant-result-title {
         color: white;
       }
     }
+  }
+
+  .challengers__squads {
+    width: 16%;
+    border: 1px solid white;
   }
 }
