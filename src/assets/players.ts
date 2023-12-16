@@ -140,7 +140,7 @@ export const players = [
   {
     name: "Guilherme",
     lastName: "Trindade",
-    nick: "Peluda",
+    nick: "Peludo",
     steam: "https://steamcommunity.com/profiles/76561198072909890/",
     steamID: "STEAM_0:0:56322081",
     avatar: FotoPeludo,
