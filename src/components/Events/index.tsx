@@ -5,7 +5,7 @@ import './styles.scss'
 import { QRCode } from 'antd';
 
 export const Events = () => {
-  const deadline = new Date("Mar 18, 2023 09:00:00").getTime()
+  const deadline = new Date("Jan 06, 2024 15:00:00").getTime()
 
   return (
     <>
@@ -15,8 +15,8 @@ export const Events = () => {
             <h3>Lanzinha no Peludo!</h3>
             <p>Este evento é uma ótima oportunidade para você se reunir, socializar e competir em um ambiente divertido e descontraído. O evento acontece em uma grande lan house, com computadores alinhados em mesas ao redor da sala. A decoração é temática, com pôsteres de jogos e personagens de videogames espalhados pelas paredes. A música alta e animada toca ao fundo, criando uma atmosfera de energia e entusiasmo. Nosso proximo evento está marcado para:</p>
             <Countdown deadline={deadline}/>
-            <h3>Save the data in Google Calendar</h3>
-            <QRCode value="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=M2owOXRtOHJuYXZ2MjcxazFicGY1NmN1bWQgNmQ4ZWIxZTM3ZWRjYTcwMDY2ZDc3ZjAwNDlmOWYxNjI0NWI1NjA0MzlmOWY2ZGVhZjc1YTFjOTFhYmJhMmMxY0Bn&tmsrc=6d8eb1e37edca70066d77f0049f9f16245b560439f9f6deaf75a1c91abba2c1c%40group.calendar.google.com" />
+            <h3>Escaneie para adicionar à sua agenda</h3>
+            <QRCode value="https://calendar.google.com/calendar/event?action=TEMPLATE&tmeid=MTd2MGs0YTNwMjVhc25wdHNhOWhmYzRjcmIgdGhlY3JhenllbGV0cm9uaWNAbQ&tmsrc=thecrazyeletronic%40gmail.com" />
           </article>
         </section>
         <section className='right__container'>
